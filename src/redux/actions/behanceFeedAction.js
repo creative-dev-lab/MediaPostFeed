@@ -1,34 +1,33 @@
 /**
  * @author Eli Zhang
- * created on 8/14/2020
- * modified on 8/14/2020
+ * created on 8/17/2020
+ * modified on 8/17/2020
  */
 
 import axios from 'axios';
 
 import {
-    GET_INSTAGRAM_FEED,
-    GET_INSTAGRAM_FEED_SUCCESS,
-    GET_INSTAGRAM_FEED_FAIL,
-    RESET_GET_INSTAGRAM_FEED
+    GET_BEHANCE_FEED,
+    GET_BEHANCE_FEED_SUCCESS,
+    GET_BEHANCE_FEED_FAIL,
+    RESET_GET_BEHANCE_FEED
 } from './types';
-
-import { INSTA_END_POINT, INSTA_URL } from "../../constants";
+import { BE_END_POINT, BE_URL } from "../../constants";
 
 // initialize the axios base url
 const instance = axios.create({
-  baseURL: `${INSTA_END_POINT}`,
+  baseURL: `${BE_END_POINT}`,
 });
 
 
 /**
-* Description: get Instagram Feed Api
+* Description: get behance Feed Api
 * 
 */
 
-export const get_instagram_feed = () => dispatch => {
+export const get_behance_feed = (page) => dispatch => {
     dispatch(fetchData(true));
-    instance.get(INSTA_URL)
+    instance.get(BE_URL + page)
         .then(res => {
             dispatch(fetchDataFulfilled(res.data));
         }).catch(err => dispatch(fetchDataRejected(err)));
@@ -38,7 +37,7 @@ export const get_instagram_feed = () => dispatch => {
 export const fetchData = (bool) => {
     //return a action type and a loading state indicating it is getting data. 
     return {
-        type: GET_INSTAGRAM_FEED,
+        type: GET_BEHANCE_FEED,
         payload: bool,
     };
 }
@@ -47,7 +46,7 @@ export const fetchData = (bool) => {
 export const fetchDataFulfilled = (data) => {
     //Return a action type and a loading to false, and the data.
     return {
-        type: GET_INSTAGRAM_FEED_SUCCESS,
+        type: GET_BEHANCE_FEED_SUCCESS,
         payload: data,
         loading: false,
     };
@@ -57,13 +56,13 @@ export const fetchDataFulfilled = (data) => {
 export const fetchDataRejected = (error) => {
     //Return a action type and a payload with a error
     return {
-        type: GET_INSTAGRAM_FEED_FAIL,
+        type: GET_BEHANCE_FEED_FAIL,
         payload: error,
         loading: false,
     };
 }
 
 //Define a action creator that resets the api call
-export const reset = () => dispatch => {
-    dispatch({ type: RESET_GET_INSTAGRAM_FEED });
+export const reset_behance_feed = () => dispatch => {
+    dispatch({ type: RESET_GET_BEHANCE_FEED });
 }

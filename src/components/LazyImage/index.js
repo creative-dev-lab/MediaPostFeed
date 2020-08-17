@@ -40,7 +40,7 @@ export default function LazyImage({
 		<Small
 			source={smallSource}
 			aspect={aspectRatio}
-			resizeMode="contain"
+			resizeMode="cover"
 			blurRadius={3}
 		>
 			{loaded && (
@@ -49,7 +49,7 @@ export default function LazyImage({
 					onLoadEnd={handleAnimate}
 					source={source}
 					aspect={aspectRatio}
-					resizeMode="contain"
+					resizeMode="cover"
 				/>
 			)}
 		</Small>

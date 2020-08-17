@@ -6,7 +6,9 @@
 
 import { combineReducers } from 'redux';
 import instagramFeedReducer from './instagramFeedReducer';
+import behanceFeedReducer from './behanceFeedReducer';
 
 export const rootReducer = combineReducers({
     instagramFeedReducer: instagramFeedReducer,
+    behanceFeedReducer: behanceFeedReducer
 });

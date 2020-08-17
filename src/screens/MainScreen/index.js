@@ -1,55 +1,55 @@
 /**
  * @author Eli Zhang
  * created on 8/14/2020
- * modified on 8/14/2020
+ * modified on 8/17/2020
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList } from 'react-native';
-
 import LazyImage from '../../components/LazyImage';
 
-import { Container, Post, Header, Avatar, Name, Description, Loading } from './styles';
+import { Container, Post, Header, Avatar, Name, Description, Loading, LikeIcon, ViewsIcon, LikeText, ViewsText } from './styles';
 
-export default function MainScreen() {
+import { get_behance_feed, reset_behance_feed } from '../../redux/actions/behanceFeedAction';
+import { connect } from 'react-redux';
+
+function MainScreen({ get_behance_feed, reset_behance_feed, feedRes }) {
+    const { behanceFeedRes } = feedRes;
     const [feed, setFeed] = useState([]);
     const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
     const [viewable, setViewable] = useState([]);
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    async function loadPage(pageNumber = page, shouldRefresh = false) {
-        if (pageNumber === total) return;
-        if (loading) return;
+    useEffect(() => {
+        loadPage();
+    }, []);
 
-        setLoading(true);
-
-        const response = await fetch(
-            `http://localhost:3000/feed?_expand=author&_limit=4&_page=${pageNumber}`
-        );
-
-        const totalItems = await response.headers.get('X-Total-Count');
-        const data = await response.json();
+    useEffect(() => {
+        if (behanceFeedRes === null) {
+            return;
+        }
 
         setLoading(false);
-        setTotal(Math.floor(totalItems / 4));
-        setPage(pageNumber + 1);
+        if (behanceFeedRes.projects !== null && behanceFeedRes.projects !== undefined && behanceFeedRes.projects.length > 0) {
+            setPage(page + 1);
+            setRefreshing(false);
+            setFeed(refreshing ? behanceFeedRes.projects : [...feed, ...behanceFeedRes.projects]);
+            reset_behance_feed();
+        }
+    }, [behanceFeedRes])
 
-        setFeed(shouldRefresh ? data : [...feed, ...data]);
+    const loadPage = async (pageNumber = page) => {
+        if (loading) return;
+        setLoading(true);
+        await get_behance_feed(pageNumber);
     }
 
     async function refreshList() {
         setRefreshing(true);
-
-        await loadPage(1, true);
-
-        setRefreshing(false);
+        setPage(1);
+        await loadPage(1);
     }
-
-    useEffect(() => {
-        loadPage();
-    }, []);
 
     const handleViewableChanged = useCallback(({ changed }) => {
         setViewable(changed.map(({ item }) => item.id));
@@ -74,19 +74,22 @@ export default function MainScreen() {
                 renderItem={({ item }) => (
                     <Post>
                         <Header>
-                            <Avatar source={{ uri: item.author.avatar }} />
-                            <Name>{item.author.name}</Name>
+                            <Avatar source={{ uri: item.owners[0].images["100"] }} />
+                            <Name>{item.owners[0].display_name}</Name>
+                            <LikeIcon source={require('../../assets/like.png')} />
+                            <LikeText>{item.stats.appreciations}</LikeText>
+                            <ViewsIcon source={require('../../assets/eye.png')} tintColor='red' />
+                            <ViewsText>{item.stats.views}</ViewsText>
                         </Header>
 
                         <LazyImage
-                            aspectRatio={item.aspectRatio}
                             shouldLoad={viewable.includes(item.id)}
-                            smallSource={{ uri: item.small }}
-                            source={{ uri: item.image }}
+                            smallSource={{ uri: item.covers["115"] }}
+                            source={{ uri: item.covers.original }}
                         />
 
                         <Description>
-                            <Name>{item.author.name}</Name> {item.description}
+                            {item.name}
                         </Description>
                     </Post>
                 )}
@@ -94,3 +97,21 @@ export default function MainScreen() {
         </Container>
     );
 }
+
+
+/**
+* Description: Connect MainScreen to redux state management
+* 
+*/
+const mapStateToProps = state => {
+    return {
+        feedRes: state.behanceFeedReducer
+    }
+}
+
+const mapDispatchToProps = {
+    get_behance_feed,
+    reset_behance_feed
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
