@@ -5,46 +5,46 @@
  */
 
 import {
-    GET_BEHANCE_FEED,
-    GET_BEHANCE_FEED_SUCCESS,
-    GET_BEHANCE_FEED_FAIL,
-    RESET_GET_BEHANCE_FEED
+    GET_INSTAGRAM_FEED,
+    GET_INSTAGRAM_FEED_SUCCESS,
+    GET_INSTAGRAM_FEED_FAIL,
+    RESET_GET_INSTAGRAM_FEED
 } from '../actions/types';
 
 const initialState = {
-    behanceFeedRes: null,
+    instagramFeedRes: null,
     loading: false,
     error: null
 }
 
 
 /**
-* Description: behance Feed action Reducer function
+* Description: instagram Feed action Reducer function
 * 
 */
 
 export default function(state = initialState, action) {
     switch(action.type) {
-        case GET_BEHANCE_FEED:
+        case GET_INSTAGRAM_FEED:
             return {
                 ...state,
                 loading: action.payload
             };
-        case GET_BEHANCE_FEED_SUCCESS:
+        case GET_INSTAGRAM_FEED_SUCCESS:
             return {
                 ...state,
-                behanceFeedRes: action.payload,
+                instagramFeedRes: action.payload,
                 loading: action.loading
             };
-        case GET_BEHANCE_FEED_FAIL:
+        case GET_INSTAGRAM_FEED_FAIL:
             return {
                 ...state,
                 error: action.payload,
                 loading: action.loading
             };
-        case RESET_GET_BEHANCE_FEED: 
+        case RESET_GET_INSTAGRAM_FEED: 
             return {
-                behanceFeedRes: null,
+                instagramFeedRes: null,
                 loading: false,
                 error: null
             };
