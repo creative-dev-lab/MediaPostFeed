@@ -18,4 +18,4 @@ export const INSTA_URL = `${INSTA_END_POINT}/auth/`;
 */
 export const BE_API_KEY = 'ugCqRrCuAuHAD6gvDTmegYXLxO2lWVca';
 export const BE_END_POINT = 'https://api.behance.net';
-export const BE_URL = `${BE_END_POINT}/v2/projects/?api_key=${BE_API_KEY}&page=`;
+export const BE_URL = `${BE_END_POINT}/v2/projects/?api_key=${BE_API_KEY}&per_page=4&page=`;
