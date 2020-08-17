@@ -12,6 +12,7 @@ import {
     GET_INSTAGRAM_FEED_FAIL,
     RESET_GET_INSTAGRAM_FEED
 } from './types';
+
 import { INSTA_END_POINT, INSTA_URL } from "../../constants";
 
 // initialize the axios base url
