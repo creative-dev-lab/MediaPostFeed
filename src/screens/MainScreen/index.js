@@ -78,7 +78,7 @@ function MainScreen({ get_behance_feed, reset_behance_feed, feedRes }) {
                             <Name>{item.owners[0].display_name}</Name>
                             <LikeIcon source={require('../../assets/like.png')} />
                             <LikeText>{item.stats.appreciations}</LikeText>
-                            <ViewsIcon source={require('../../assets/eye.png')} tintColor='red' />
+                            <ViewsIcon source={require('../../assets/eye.png')} />
                             <ViewsText>{item.stats.views}</ViewsText>
                         </Header>
 

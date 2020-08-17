@@ -9,4 +9,5 @@ import styled from 'styled-components/native';
 export const HeaderIcon = styled.Image`
     width: 150px;
     height: 28px;
+    tint-color: black;
 `;
